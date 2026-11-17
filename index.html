@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARCADIA</title>
+  <style>
+    :root {
+      --bg-color: #0b0e17;
+      --card-bg: #151b2b;
+      --card-border: #26314d;
+      --accent: #00f0ff;
+      --accent-glow: rgba(0, 240, 255, 0.35);
+      --text-main: #f4f7ff;
+      --text-muted: #8a99bd;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2.5rem 1.5rem;
+    }
+
+    header {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2.5rem;
+      border-bottom: 2px solid var(--card-border);
+    }
+
+    .logo {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+      text-shadow: 0 0 18px var(--accent-glow);
+    }
+
+    .status-badge {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    main {
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .grid-title {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .game-slot {
+      background: var(--card-bg);
+      border: 2px dashed var(--card-border);
+      border-radius: 16px;
+      height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 1.5rem;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+
+    .game-slot.installed {
+      border-style: solid;
+      border-color: var(--accent);
+    }
+
+    .game-slot:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+
+    .slot-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .slot-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .slot-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Game Stage Overlay */
+    #game-stage {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 14, 23, 0.96);
+      z-index: 100;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    #game-stage.active {
+      display: flex;
+    }
+
+    .stage-header {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .close-btn {
+      background: #ff3b5c;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .stage-container {
+      width: 100%;
+      max-width: 900px;
+      height: 560px;
+      background: #000;
+      border: 2px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+
+    .stage-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">ARCADIA</div>
+    <div class="status-badge">1 GAME INSTALLED</div>
+  </header>
+
+  <main>
+    <div class="grid-title">Game Library</div>
+    <div class="games-grid">
+      <!-- Slot 1: Local Web Dashers -->
+      <div class="game-slot installed" onclick="launchWebDashers()">
+        <div class="slot-icon">▶</div>
+        <div class="slot-title">Web Dashers</div>
+        <div class="slot-subtitle">Local Folder Build</div>
+      </div>
+
+      <!-- Empty Slots 2 to 6 -->
+      <div class="game-slot" onclick="openEmptySlot(2)">
+        <div class="slot-icon">+</div>
+        <div class="slot-title">Empty Slot 02</div>
+        <div class="slot-subtitle">Ready for a new game</div>
+      </div>
+
+      <div class="game-slot" onclick="openEmptySlot(3)">
+        <div class="slot-icon">+</div>
+        <div class="slot-title">Empty Slot 03</div>
+        <div class="slot-subtitle">Ready for a new game</div>
+      </div>
+
+      <div class="game-slot" onclick="openEmptySlot(4)">
+        <div class="slot-icon">+</div>
+        <div class="slot-title">Empty Slot 04</div>
+        <div class="slot-subtitle">Ready for a new game</div>
+      </div>
+
+      <div class="game-slot" onclick="openEmptySlot(5)">
+        <div class="slot-icon">+</div>
+        <div class="slot-title">Empty Slot 05</div>
+        <div class="slot-subtitle">Ready for a new game</div>
+      </div>
+
+      <div class="game-slot" onclick="openEmptySlot(6)">
+        <div class="slot-icon">+</div>
+        <div class="slot-title">Empty Slot 06</div>
+        <div class="slot-subtitle">Ready for a new game</div>
+      </div>
+    </div>
+  </main>
+
+  <div id="game-stage">
+    <div class="stage-header">
+      <h2 id="stage-title">Game Stage</h2>
+      <button class="close-btn" onclick="closeStage()">Back to Arcadia</button>
+    </div>
+    <div class="stage-container" id="stage-container"></div>
+  </div>
+
+  <script>
+    function launchWebDashers() {
+      const stage = document.getElementById('game-stage');
+      const stageTitle = document.getElementById('stage-title');
+      const container = document.getElementById('stage-container');
+
+      stageTitle.textContent = 'Web Dashers';
+      container.innerHTML = `<iframe src="./webdashers/index.html" allowfullscreen></iframe>`;
+      stage.classList.add('active');
+    }
+
+    function openEmptySlot(slotNumber) {
+      const stage = document.getElementById('game-stage');
+      const stageTitle = document.getElementById('stage-title');
+      const container = document.getElementById('stage-container');
+
+      stageTitle.textContent = `Slot 0${slotNumber}`;
+      container.innerHTML = `<div style="padding: 2rem; text-align: center;">Slot 0${slotNumber} is currently empty.</div>`;
+      stage.classList.add('active');
+    }
+
+    function closeStage() {
+      const stage = document.getElementById('game-stage');
+      const container = document.getElementById('stage-container');
+      stage.classList.remove('active');
+      container.innerHTML = '';
+    }
+  </script>
+
+</body>
+</html>
