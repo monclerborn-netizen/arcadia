@@ -197,11 +197,11 @@
   <main>
     <div class="grid-title">Game Library</div>
     <div class="games-grid">
-      <!-- Slot 1: Web Dashers (Opens cleanly in full tab so it never refuses connection) -->
-      <div class="game-slot installed" onclick="window.open('https://github.io', '_blank', 'noopener')">
+      <!-- Slot 1: Forked Web Dashers -->
+      <div class="game-slot installed" onclick="launchWebDashers()">
         <div class="slot-icon">▶</div>
         <div class="slot-title">Web Dashers</div>
-        <div class="slot-subtitle">Launches Full Game Tab</div>
+        <div class="slot-subtitle">Geometry Dash Web Edition</div>
       </div>
 
       <!-- Empty Slots 2 to 6 -->
@@ -246,6 +246,16 @@
   </div>
 
   <script>
+    function launchWebDashers() {
+      const stage = document.getElementById('game-stage');
+      const stageTitle = document.getElementById('stage-title');
+      const container = document.getElementById('stage-container');
+
+      stageTitle.textContent = 'Web Dashers';
+      container.innerHTML = `<iframe src="https://github.io" allowfullscreen></iframe>`;
+      stage.classList.add('active');
+    }
+
     function openEmptySlot(slotNumber) {
       const stage = document.getElementById('game-stage');
       const stageTitle = document.getElementById('stage-title');
