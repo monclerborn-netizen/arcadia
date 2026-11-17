@@ -156,23 +156,6 @@
       margin-bottom: 1rem;
     }
 
-    .stage-actions {
-      display: flex;
-      gap: 0.6rem;
-    }
-
-    .action-btn {
-      background: #1e293b;
-      color: #f4f7ff;
-      border: 1px solid var(--card-border);
-      padding: 0.6rem 1rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-
     .close-btn {
       background: #ff3b5c;
       color: white;
@@ -214,11 +197,11 @@
   <main>
     <div class="grid-title">Game Library</div>
     <div class="games-grid">
-      <!-- Slot 1: Web Dashers -->
-      <div class="game-slot installed" onclick="launchWebDashers()">
+      <!-- Slot 1: Web Dashers (Opens cleanly in full tab so it never refuses connection) -->
+      <div class="game-slot installed" onclick="window.open('https://github.io', '_blank', 'noopener')">
         <div class="slot-icon">▶</div>
         <div class="slot-title">Web Dashers</div>
-        <div class="slot-subtitle">Geometry Dash Web Edition</div>
+        <div class="slot-subtitle">Launches Full Game Tab</div>
       </div>
 
       <!-- Empty Slots 2 to 6 -->
@@ -257,35 +240,18 @@
   <div id="game-stage">
     <div class="stage-header">
       <h2 id="stage-title">Game Stage</h2>
-      <div class="stage-actions">
-        <a id="fallback-link" class="action-btn" href="https://github.io" target="_blank" rel="noopener">Open Full Tab</a>
-        <button class="close-btn" onclick="closeStage()">Back to Arcadia</button>
-      </div>
+      <button class="close-btn" onclick="closeStage()">Back to Arcadia</button>
     </div>
     <div class="stage-container" id="stage-container"></div>
   </div>
 
   <script>
-    function launchWebDashers() {
-      const stage = document.getElementById('game-stage');
-      const stageTitle = document.getElementById('stage-title');
-      const container = document.getElementById('stage-container');
-      const fallback = document.getElementById('fallback-link');
-
-      stageTitle.textContent = 'Web Dashers';
-      fallback.style.display = 'inline-block';
-      container.innerHTML = `<iframe src="https://github.io" allowfullscreen></iframe>`;
-      stage.classList.add('active');
-    }
-
     function openEmptySlot(slotNumber) {
       const stage = document.getElementById('game-stage');
       const stageTitle = document.getElementById('stage-title');
       const container = document.getElementById('stage-container');
-      const fallback = document.getElementById('fallback-link');
 
       stageTitle.textContent = `Slot 0${slotNumber}`;
-      fallback.style.display = 'none';
       container.innerHTML = `<div style="padding: 2rem; text-align: center;">Slot 0${slotNumber} is currently empty.</div>`;
       stage.classList.add('active');
     }
